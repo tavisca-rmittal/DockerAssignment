@@ -49,7 +49,7 @@ pipeline{
                 expression{params.RELEASE_ENVIRONMENT == "Build" || params.RELEASE_ENVIRONMENT == "Deploy"}
             }
             steps{
-                powershell '''
+                bat '''
                     echo '====================Restore Start ================'
                     dotnet restore ${SOLUTION_PATH} --source https://api.nuget.org/v3/index.json
                     echo '=====================Restore Completed============'
@@ -73,7 +73,7 @@ pipeline{
                 expression{params.RELEASE_ENVIRONMENT == "Deploy"}
             }
             steps {
-                powershell '''
+                bat '''
                 echo '===============Deploying using Docker==========='
                 docker run -p 8006:80 dockerimage
                 '''

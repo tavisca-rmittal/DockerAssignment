@@ -38,8 +38,7 @@ pipeline{
             description:  "Enter Docker hub Password"
         )
         string(
-            name: "SONAR_PROJECT_TOKEN", 
-            defaultValue: "", 
+            name: "SONAR_PROJECT_TOKEN",           
             description: "Enter Sonarqube token"
         )
         choice(

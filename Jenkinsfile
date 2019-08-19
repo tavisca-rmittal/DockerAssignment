@@ -53,9 +53,9 @@ pipeline{
                     echo '====================Restore Start ================'
                     dotnet restore %SOLUTION_PATH% --source https://api.nuget.org/v3/index.json
                     echo '=====================Restore Completed============'
-                    echo '====================Build DockerImage Start ================'
-                    dotnet build --tag=dockerimage .
-                    echo '=====================Build DockerImage Completed============'
+                    echo '====================Build  Start ================'
+                    dotnet build 
+                    echo '=====================Build  Completed============'
                     echo '====================Test Start ================'
                     dotnet test %TEST_SOLUTION_PATH%
                     echo '=====================test Completed============'

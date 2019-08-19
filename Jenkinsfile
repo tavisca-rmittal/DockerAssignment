@@ -80,7 +80,8 @@ pipeline{
                     
                      dotnet publish %SOLUTION_PATH% -c Release
                      docker build --tag=%DOCKER_USERNAME%/web_api_docker --build-arg project_name=%PROJECT_NAME%.dll .
-
+		     docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
+                     docker push %DOCKER_USER_NAME%/web_api_docker:latest 
                     echo '=====================Publish Completed============'
                 
                 '''            
@@ -95,8 +96,7 @@ pipeline{
             steps {
                 bat '''
                 echo '===============Deploying using Docker==========='
-                docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
-                docker push %DOCKER_USER_NAME%/web_api_docker:latest 
+               
                 '''
             }
         }

@@ -23,7 +23,11 @@ pipeline{
             defaultValue: "HiHelloApi.Tests/HiHelloApi.Tests.csproj",
             description: "TEST SOLUTION PATH"
         )
-        
+        string(
+            name: "PROJECT_NAME", 
+            defaultValue: "HiHelloApi"
+            
+        )
     
          string(
             name: "SOLUTION_DLL_FILE",
@@ -73,12 +77,15 @@ pipeline{
                     dotnet %MSBUILD_DLL_PATH% end /d:sonar.login=%SONAR_PROJECT_TOKEN%
                     echo '============Sonarqube end======================'
                     echo '====================Publish Start at docker hub ================'
-                    docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
-	                docker tag HiHelloApi:dockerimage %DOCKER_USER_NAME%/web_api_docker
-	                docker push %DOCKER_USER_NAME%/web_api_docker:dockerimage
+                    
+                     dotnet publish %SOLUTION_PATH% -c Release
+                     docker build --tag=%DOCKER_USERNAME%/web_api_docker --build-arg project_name=%PROJECT_NAME%.dll .
+
                     echo '=====================Publish Completed============'
                 
-                '''
+                '''            
+				
+				
             }
         }
              stage ('Deploy') {
@@ -88,7 +95,8 @@ pipeline{
             steps {
                 bat '''
                 echo '===============Deploying using Docker==========='
-                docker run -p 8006:80 HiHelloApi:dockerimage
+                docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
+                docker push %DOCKER_USER_NAME%/web_api_docker:latest 
                 '''
             }
         }

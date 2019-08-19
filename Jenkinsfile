@@ -51,18 +51,18 @@ pipeline{
             steps{
                 bat '''
                     echo '====================Restore Start ================'
-                    dotnet restore ${SOLUTION_PATH} --source https://api.nuget.org/v3/index.json
+                    dotnet restore %SOLUTION_PATH% --source https://api.nuget.org/v3/index.json
                     echo '=====================Restore Completed============'
                     echo '====================Build DockerImage Start ================'
                     dotnet build --tag=dockerimage .
                     echo '=====================Build DockerImage Completed============'
                     echo '====================Test Start ================'
-                    dotnet test ${TEST_SOLUTION_PATH}
+                    dotnet test %TEST_SOLUTION_PATH%
                     echo '=====================test Completed============'
                     echo '====================Publish Start at docker hub ================'
-                    docker login -u ${DOCKER_USER_NAME} -p ${DOCKER_PASSWORD}
-				    docker push tag dockerimage ${DOCKER_USER_NAME}/web_api_docker
-				    docker push ${DOCKER_USER_NAME}/web_api_docker
+                    docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
+	            docker push tag dockerimage %DOCKER_USER_NAME%/web_api_docker
+	            docker push %DOCKER_USER_NAME%/web_api_docker
                     echo '=====================Publish Completed============'
                 
                 '''

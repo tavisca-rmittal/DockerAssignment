@@ -37,6 +37,11 @@ pipeline{
             name: "DOCKER_PASSWORD",
             description:  "Enter Docker hub Password"
         )
+        string(
+            name: "SONAR_PROJECT_TOKEN", 
+            defaultValue: "", 
+            description: "Enter Sonarqube token"
+        )
         choice(
             name: "RELEASE_ENVIRONMENT",
             choices: ["Build","Deploy"],
@@ -50,6 +55,8 @@ pipeline{
             }
             steps{
                 bat '''
+                    echo '=========Sonarqube begin=============='
+                    dotnet C:\Users\rmittal\Desktop\TAVISCA\sonarqube-7.9.1\sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0\SonarScanner.MSBuild.dll begin /k:"web_api_using_sonarqube" /d:sonar.host.url="http://localhost:9000" /d:sonar.login=%SONAR_PROJECT_TOKEN%
                     echo '====================Restore Start ================'
                     dotnet restore %SOLUTION_PATH% --source https://api.nuget.org/v3/index.json
                     echo '=====================Restore Completed============'
@@ -59,10 +66,12 @@ pipeline{
                     echo '====================Test Start ================'
                     dotnet test %TEST_SOLUTION_PATH%
                     echo '=====================test Completed============'
+                    dotnet C:\Users\rmittal\Desktop\TAVISCA\sonarqube-7.9.1\sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0\SonarScanner.MSBuild.dll end /d:sonar.login=%SONAR_PROJECT_TOKEN%
+                    echo '============Sonarqube end======================'
                     echo '====================Publish Start at docker hub ================'
                     docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
-	            docker tag ubuntu:latest %DOCKER_USER_NAME%/web_api_docker
-	            docker push %DOCKER_USER_NAME%/web_api_docker:latest
+	                docker tag ubuntu:latest %DOCKER_USER_NAME%/web_api_docker
+	                docker push %DOCKER_USER_NAME%/web_api_docker:latest
                     echo '=====================Publish Completed============'
                 
                 '''

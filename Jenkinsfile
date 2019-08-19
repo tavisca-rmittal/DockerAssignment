@@ -43,7 +43,7 @@ pipeline{
         )
          string(
             name: "MSBUILD_DLL_PATH",           
-            defaultValue: "C:\Users\rmittal\Desktop\TAVISCA\sonarqube-7.9.1\sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0\SonarScanner.MSBuild.dll"
+            defaultValue: "C:/Users/rmittal/Desktop/TAVISCA/sonarqube-7.9.1/sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0/SonarScanner.MSBuild.dll"
         )
 
         choice(

@@ -74,8 +74,8 @@ pipeline{
                     echo '============Sonarqube end======================'
                     echo '====================Publish Start at docker hub ================'
                     docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
-	                docker tag ubuntu:latest %DOCKER_USER_NAME%/web_api_docker
-	                docker push %DOCKER_USER_NAME%/web_api_docker:latest
+	                docker tag HiHelloApi:dockerimage %DOCKER_USER_NAME%/web_api_docker
+	                docker push %DOCKER_USER_NAME%/web_api_docker:dockerimage
                     echo '=====================Publish Completed============'
                 
                 '''
@@ -88,7 +88,7 @@ pipeline{
             steps {
                 bat '''
                 echo '===============Deploying using Docker==========='
-                docker run -p 8006:80 ubuntu:latest
+                docker run -p 8006:80 HiHelloApi:dockerimage
                 '''
             }
         }

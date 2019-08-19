@@ -23,6 +23,20 @@ pipeline{
             defaultValue: "HiHelloApi.Tests/HiHelloApi.Tests.csproj",
             description: "TEST SOLUTION PATH"
         )
+        
+    
+         string(
+            name: "SOLUTION_DLL_FILE",
+            defaultValue: "API.dll",
+        )
+        string(
+            name: "DOCKER_USER_NAME",
+            description: "Enter Docker hub Username"
+        )
+        string(
+            name: "DOCKER_PASSWORD",
+            description:  "Enter Docker hub Password"
+        )
         choice(
             name: "RELEASE_ENVIRONMENT",
             choices: ["Build","Deploy"],
@@ -39,14 +53,16 @@ pipeline{
                     echo '====================Restore Start ================'
                     dotnet restore ${SOLUTION_PATH} --source https://api.nuget.org/v3/index.json
                     echo '=====================Restore Completed============'
-                    echo '====================Build Project Start ================'
-                    dotnet build ${PROJECT_PATH} 
+                    echo '====================Build DockerImage Start ================'
+                    dotnet build --tag=dockerimage .
                     echo '=====================Build Project Completed============'
-                     echo '====================Test Start ================'
+                    echo '====================Test Start ================'
                     dotnet test ${TEST_SOLUTION_PATH}
                     echo '=====================test Completed============'
-                     echo '====================Publish Start ================'
-                    dotnet publish ${PROJECT_PATH}
+                    echo '====================Publish Start at docker hub ================'
+                    docker login -u ${DOCKER_USER_NAME} -p ${DOCKER_PASSWORD}
+				    docker push tag dockerimage ridhima1998/web_api_docker
+				    docker push ridhima1998/web_api_docker
                     echo '=====================Publish Completed============'
                 
                 '''
@@ -59,8 +75,7 @@ pipeline{
             steps {
                 powershell '''
                 echo '===============Deploying using Docker==========='
-                docker build -t docker_api_image .
-                docker run -rm -p 8006:80 docker_api_image
+                docker run -p 8006:80 dockerimage
                 '''
             }
         }

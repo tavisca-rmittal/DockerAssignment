@@ -27,7 +27,7 @@ pipeline{
     
          string(
             name: "SOLUTION_DLL_FILE",
-            defaultValue: "API.dll",
+            defaultValue: "HiHellApi.dll",
         )
         string(
             name: "DOCKER_USER_NAME",
@@ -55,14 +55,14 @@ pipeline{
                     echo '=====================Restore Completed============'
                     echo '====================Build DockerImage Start ================'
                     dotnet build --tag=dockerimage .
-                    echo '=====================Build Project Completed============'
+                    echo '=====================Build DockerImage Completed============'
                     echo '====================Test Start ================'
                     dotnet test ${TEST_SOLUTION_PATH}
                     echo '=====================test Completed============'
                     echo '====================Publish Start at docker hub ================'
                     docker login -u ${DOCKER_USER_NAME} -p ${DOCKER_PASSWORD}
-				    docker push tag dockerimage ridhima1998/web_api_docker
-				    docker push ridhima1998/web_api_docker
+				    docker push tag dockerimage ${DOCKER_USER_NAME}/web_api_docker
+				    docker push ${DOCKER_USER_NAME}/web_api_docker
                     echo '=====================Publish Completed============'
                 
                 '''

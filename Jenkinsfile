@@ -68,7 +68,7 @@ pipeline{
                 '''
             }
         }
-             stage ('Creating Docker Image') {
+             stage ('Deploy') {
             when{
                 expression{params.RELEASE_ENVIRONMENT == "Deploy"}
             }

@@ -76,12 +76,11 @@ pipeline{
                     echo '=====================test Completed============'
                     dotnet %MSBUILD_DLL_PATH% end /d:sonar.login=%SONAR_PROJECT_TOKEN%
                     echo '============Sonarqube end======================'
+		    
                     echo '====================Publish Start at docker hub ================'
-                    
-                     dotnet publish %SOLUTION_PATH% -c Release
-                     docker build --tag=%DOCKER_USERNAME%/web_api_docker --build-arg project_name=%PROJECT_NAME%.dll .
-		     docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
-                     docker push %DOCKER_USER_NAME%/web_api_docker:latest 
+                    docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%   
+		    docker tag HiHelloApi %DOCKER_USER_NAME%/web_api_docker:dockerimage
+		    docker push %DOCKER_USER_NAME%/web_api_docker:dockerimage		    
                     echo '=====================Publish Completed============'
                 
                 '''            

@@ -61,8 +61,8 @@ pipeline{
                     echo '=====================test Completed============'
                     echo '====================Publish Start at docker hub ================'
                     docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
-	            docker tag ubuntu:dockerimage %DOCKER_USER_NAME%/web_api_docker
-	            docker push %DOCKER_USER_NAME%/web_api_docker:dockerimage
+	            docker tag ubuntu:latest %DOCKER_USER_NAME%/web_api_docker
+	            docker push %DOCKER_USER_NAME%/web_api_docker:latest
                     echo '=====================Publish Completed============'
                 
                 '''
@@ -75,7 +75,7 @@ pipeline{
             steps {
                 bat '''
                 echo '===============Deploying using Docker==========='
-                docker run -p 8006:80 dockerimage
+                docker run -p 8006:80 latest
                 '''
             }
         }

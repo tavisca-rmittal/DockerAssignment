@@ -1,12 +1,5 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet
 WORKDIR /app
-#EXPOSE 80
- 
-FROM microsoft/dotnet:2.2-sdk AS build
-WORKDIR .
-COPY . .
-RUN dotnet build "HiHelloApi.sln" -c Release -o /app
-RUN dotnet publish "HiHellApi.sln" -c Release -o /app/publish
- 
-WORKDIR /app/publish
-ENTRYPOINT ["dotnet", "HiHelloApi.dll"]
+COPY HiHellApi/bin/Release/netcoreapp2.2/publish/. /app
+EXPOSE 80
+CMD ["dotnet","HiHelloApi.dll"]

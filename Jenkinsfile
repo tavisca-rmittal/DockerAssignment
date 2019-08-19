@@ -61,7 +61,7 @@ pipeline{
                     echo '=====================test Completed============'
                     echo '====================Publish Start at docker hub ================'
                     docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%
-	            docker tag python:dockerimage %DOCKER_USER_NAME%/web_api_docker
+	            docker tag ubuntu:dockerimage %DOCKER_USER_NAME%/web_api_docker
 	            docker push %DOCKER_USER_NAME%/web_api_docker:dockerimage
                     echo '=====================Publish Completed============'
                 

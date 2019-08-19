@@ -96,7 +96,7 @@ pipeline{
             steps {
                 bat '''
                 echo '===============Deploying using Docker==========='
-               
+                docker run -p 8006:80 web_api_docker
                 '''
             }
         }

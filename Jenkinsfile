@@ -51,7 +51,7 @@ pipeline{
         )
 
         choice(
-            name: "RELEASE_ENVIRONMENT",
+            name: "STAGE_FOR_EITHER_BUILD_OR_DEPLOY",
             choices: ["Build","Deploy"],
             description: "Tick what you want to do"
         )
@@ -59,7 +59,7 @@ pipeline{
     stages{
         stage('Build'){
             when{
-                expression{params.RELEASE_ENVIRONMENT == "Build" || params.RELEASE_ENVIRONMENT == "Deploy"}
+                expression{params.STAGE_FOR_EITHER_BUILD_OR_DEPLOY == "Build" || params.STAGE_FOR_EITHER_BUILD_OR_DEPLOY == "Deploy"}
             }
             steps{
                 bat '''
@@ -78,24 +78,23 @@ pipeline{
                     echo '============Sonarqube end======================'
 		    
                     echo '====================Publish Start at docker hub ================'
-                    docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%   
-		    docker tag HiHelloApi %DOCKER_USER_NAME%/web_api_docker:dockerimage
-		    docker push %DOCKER_USER_NAME%/web_api_docker:dockerimage		    
+                    docker login -u %DOCKER_USER_NAME% -p %DOCKER_PASSWORD%  
+                    docker build --tag=mydockerimage .
+		            docker push %DOCKER_USER_NAME%/web_api_docker:mydockerimage		    
                     echo '=====================Publish Completed============'
                 
                 '''            
-				
-				
+
             }
         }
              stage ('Deploy') {
             when{
-                expression{params.RELEASE_ENVIRONMENT == "Deploy"}
+                expression{params.STAGE_FOR_EITHER_BUILD_OR_DEPLOY == "Deploy"}
             }
-            steps {
+            steps {                     
                 bat '''
                 echo '===============Deploying using Docker==========='
-                docker run -p 8006:80 web_api_docker
+                docker run -p 8006:80 %DOCKER_USER_NAME%/web_api_docker:mydockerimage
                 '''
             }
         }
